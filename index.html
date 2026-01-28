@@ -1,0 +1,2969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShipRight — From App Idea to GitHub Repo in 10 Minutes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #faf9f7;
+      --bg-warm: #f5f0ea;
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --accent: #0066ff;
+      --accent-light: #e6f0ff;
+      --accent-hover: #0052cc;
+      --accent-glow: rgba(0, 102, 255, 0.3);
+      --card: #ffffff;
+      --card-border: #e5e5e5;
+      --border: #e5e5e5;
+      --green: #22c55e;
+      --red: #ef4444;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Scroll animations */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .stagger-children > * {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .stagger-children.visible > *:nth-child(1) { animation: fadeUp 0.6s ease forwards 0.1s; }
+    .stagger-children.visible > *:nth-child(2) { animation: fadeUp 0.6s ease forwards 0.2s; }
+    .stagger-children.visible > *:nth-child(3) { animation: fadeUp 0.6s ease forwards 0.3s; }
+    .stagger-children.visible > *:nth-child(4) { animation: fadeUp 0.6s ease forwards 0.4s; }
+    .stagger-children.visible > *:nth-child(5) { animation: fadeUp 0.6s ease forwards 0.5s; }
+    .stagger-children.visible > *:nth-child(6) { animation: fadeUp 0.6s ease forwards 0.6s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glow effect on hover */
+    .glow-hover {
+      transition: all 0.3s ease;
+    }
+
+    .glow-hover:hover {
+      box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Gradient background */
+    .gradient-bg {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #faf9f7 0%, #f0ebe3 50%, #e8e0d5 100%);
+      z-index: -3;
+    }
+
+    /* Animated grid */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -2;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    .gradient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      opacity: 0.5;
+    }
+
+    .gradient-orb-1 {
+      top: -20%;
+      right: 5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+      animation: float1 8s ease-in-out infinite;
+    }
+
+    .gradient-orb-2 {
+      bottom: 10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+      animation: float2 10s ease-in-out infinite;
+    }
+
+    .gradient-orb-3 {
+      top: 40%;
+      right: -15%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+      animation: float3 12s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-30px, 40px) scale(1.1); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -30px) scale(1.05); }
+    }
+
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, -40px) scale(1.08); }
+    }
+
+    /* Particle canvas */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Glow lines */
+    .glow-line {
+      position: fixed;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.3), transparent);
+      z-index: -1;
+      animation: glowMove 3s ease-in-out infinite;
+    }
+
+    .glow-line-1 {
+      top: 20%;
+      left: 0;
+      right: 0;
+      animation-delay: 0s;
+    }
+
+    .glow-line-2 {
+      top: 50%;
+      left: 0;
+      right: 0;
+      animation-delay: 1s;
+    }
+
+    .glow-line-3 {
+      top: 80%;
+      left: 0;
+      right: 0;
+      animation-delay: 2s;
+    }
+
+    @keyframes glowMove {
+      0%, 100% { opacity: 0; transform: scaleX(0); }
+      50% { opacity: 1; transform: scaleX(1); }
+    }
+
+    /* Container */
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 249, 247, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-lg {
+      padding: 16px 32px;
+      font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 102, 255, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      left: calc(var(--mouse-x, 50%) - 200px);
+      top: calc(var(--mouse-y, 50%) - 200px);
+      pointer-events: none;
+      transition: left 0.3s ease, top 0.3s ease;
+      opacity: 0.8;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 100px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 32px;
+      animation: badgeGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes badgeGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 102, 255, 0.15); }
+      50% { box-shadow: 0 0 25px rgba(0, 102, 255, 0.25); }
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-sub strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-note {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* Social proof in hero */
+    .hero-social-proof {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-avatars {
+      display: flex;
+      margin-right: 4px;
+    }
+
+    .hero-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.75rem;
+      margin-left: -8px;
+      border: 2px solid var(--bg);
+    }
+
+    .hero-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .hero-avatar:nth-child(2) { background: #8b5cf6; }
+    .hero-avatar:nth-child(3) { background: #06b6d4; }
+    .hero-avatar:nth-child(4) { background: var(--bg-warm); color: var(--text-muted); }
+
+    .hero-social-proof p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .hero-social-proof p strong {
+      color: var(--text);
+    }
+
+    /* Demo video section */
+    .demo-section {
+      padding: 40px 0 80px;
+    }
+
+    .demo-video-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .demo-video-placeholder {
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, var(--bg-warm) 0%, #e8e0d5 100%);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-video-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .demo-video-placeholder:hover::before {
+      opacity: 1;
+    }
+
+    .demo-video-placeholder:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
+    }
+
+    .demo-video-placeholder:hover .demo-play-btn {
+      transform: scale(1.1);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+
+    .demo-play-btn {
+      width: 80px;
+      height: 80px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .demo-play-btn svg {
+      margin-left: 4px;
+    }
+
+    .demo-label {
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Old Way vs New Way */
+    .old-new-section {
+      padding: 80px 0;
+    }
+
+    .old-new-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .old-way-card,
+    .new-way-card {
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s ease;
+    }
+
+    .old-way-card {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .new-way-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .new-way-card:hover {
+      box-shadow: 0 8px 32px rgba(34, 197, 94, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .old-new-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    .old-label {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .new-label {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .old-way-card h3,
+    .new-way-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .old-new-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .old-new-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+
+    .old-new-list li svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pain-item svg {
+      color: #dc2626;
+    }
+
+    .solution-item svg {
+      color: #16a34a;
+    }
+
+    /* Benefits section */
+    .benefits-section {
+      background: var(--bg-warm);
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .benefit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .benefit-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.03) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .benefit-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 102, 255, 0.1);
+    }
+
+    .benefit-card:hover::after {
+      opacity: 1;
+    }
+
+    .benefit-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--accent-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover .benefit-icon {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .benefit-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .benefit-card p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* Input box hero style */
+    .hero-input-wrapper {
+      max-width: 720px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+    }
+
+    .hero-input:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 4px 30px rgba(0, 102, 255, 0.15), 0 0 0 1px var(--accent);
+    }
+
+    .hero-input-icon {
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .hero-input textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 1.125rem;
+      resize: none;
+      background: transparent;
+      color: var(--text);
+      min-height: 80px;
+      line-height: 1.5;
+    }
+
+    .hero-input textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .hero-input-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .hero-input-btn:hover {
+      background: var(--accent-hover);
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Section styles */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-header h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* How it works */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .step:hover {
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.1);
+      transform: translateY(-5px);
+    }
+
+    .step:hover::before {
+      opacity: 1;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--accent-light);
+      color: var(--accent);
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .step:hover .step-number {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .step h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* Problem section */
+    .problem {
+      background: var(--bg-warm);
+      border-radius: 32px;
+      padding: 64px;
+      margin: 0 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .problem h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .problem h2 span {
+      color: var(--text-muted);
+    }
+
+    .problem > div > p {
+      color: var(--text-muted);
+      font-size: 1.0625rem;
+    }
+
+    .pain-points {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pain-point {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      transition: all 0.3s ease;
+    }
+
+    .pain-point:hover {
+      border-color: var(--red);
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+      transform: translateX(5px);
+    }
+
+    .pain-point-icon {
+      width: 36px;
+      height: 36px;
+      background: #fef2f2;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--red);
+      flex-shrink: 0;
+    }
+
+    .pain-point span {
+      font-weight: 500;
+    }
+
+    /* Error mock UI */
+    .error-mock {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      background: #faf9f7;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      z-index: 10;
+    }
+
+    .error-mock-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .error-mock-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: #1a1a1a;
+    }
+
+    .error-mock-title svg {
+      color: #f59e0b;
+    }
+
+    .error-mock-title svg.flash {
+      animation: flashError 0.2s ease infinite;
+    }
+
+    @keyframes flashError {
+      0%, 100% { opacity: 1; color: #ef4444; }
+      50% { opacity: 0.3; color: #f59e0b; }
+    }
+
+    .error-mock-desc {
+      font-size: 0.875rem;
+      color: #6b6b6b;
+    }
+
+    .error-mock-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .error-mock-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .error-mock-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .error-mock-btn.light {
+      background: #f5f0ea;
+      color: #1a1a1a;
+      border: 1px solid #e5e5e5;
+    }
+
+    .error-mock-btn.dark {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .error-mock-btn kbd {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.75rem;
+    }
+
+    .error-mock-btn.dark kbd {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Solution */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .solution-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .solution-feature {
+      display: flex;
+      gap: 16px;
+    }
+
+    .solution-feature-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .solution-feature strong {
+      font-weight: 600;
+    }
+
+    .solution-feature span {
+      color: var(--text-muted);
+    }
+
+    /* File tree visual */
+    .file-tree {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .file-tree:hover {
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.1);
+    }
+
+    .file-tree::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .file-tree:hover::before {
+      opacity: 1;
+    }
+
+    .file-tree-header {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .file-tree-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      color: var(--text-muted);
+    }
+
+    .file-tree-item.highlight {
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    .file-tree-item .tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.6875rem;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-left: auto;
+    }
+
+    .file-tree-indent {
+      margin-left: 20px;
+    }
+
+    /* Features grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.03) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 102, 255, 0.1);
+    }
+
+    .feature-card:hover::after {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--accent-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .feature-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* Comparison */
+    .comparison-wrapper {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .comparison-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .comparison-header > div {
+      padding: 20px 24px;
+      font-weight: 600;
+    }
+
+    .comparison-header > div:nth-child(2) {
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .comparison-header > div:nth-child(3) {
+      text-align: center;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .comparison-row:last-child {
+      border-bottom: none;
+    }
+
+    .comparison-row > div {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .comparison-row > div:first-child {
+      font-weight: 500;
+    }
+
+    .comparison-row > div:nth-child(2) {
+      background: rgba(0, 102, 255, 0.03);
+      justify-content: center;
+    }
+
+    .comparison-row > div:nth-child(3) {
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .check {
+      color: var(--green);
+    }
+
+    .x {
+      color: var(--text-muted);
+      opacity: 0.4;
+    }
+
+    /* Use cases */
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .use-case {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      transition: all 0.4s ease;
+    }
+
+    .use-case:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+    }
+
+    .use-case-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+
+    .use-case:hover .use-case-icon {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .use-case h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .use-case p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      background: var(--bg-warm);
+      border-radius: 32px;
+      padding: 64px;
+      margin: 0 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonials-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(0, 102, 255, 0.05) 0%, transparent 50%);
+      animation: rotateGlow 20s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto 48px;
+      position: relative;
+    }
+
+    .testimonial {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .testimonial:hover {
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .testimonial-quote {
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-author {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.4s ease;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.12);
+      position: relative;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 16px;
+      border-radius: 100px;
+    }
+
+    .pricing-name {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .pricing-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .pricing-period {
+      color: var(--text-muted);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 32px;
+      flex: 1;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+
+    .pricing-features li svg {
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* FAQ */
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .faq-question:hover {
+      color: var(--accent);
+    }
+
+    .faq-icon {
+      transition: transform 0.2s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      display: none;
+      padding-bottom: 24px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0, 102, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      animation: ctaPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .cta h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .cta p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .final-cta {
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg-warm) 100%);
+    }
+
+    .cta-button {
+      font-size: 1.125rem;
+      padding: 18px 40px;
+    }
+
+    .cta-details {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .cta-details span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .cta-details svg {
+      color: var(--green);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      max-width: 280px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+      margin-top: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 64px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .footer-col a {
+      display: block;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      padding: 6px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-bottom p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .footer-social a:hover {
+      background: var(--bg-warm);
+      color: var(--text);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.3s ease;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-warm);
+      color: var(--text);
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .modal-header h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .modal-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-group textarea {
+      resize: none;
+    }
+
+    .modal-submit {
+      margin-top: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .steps,
+      .features-grid,
+      .benefits-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .problem-grid,
+      .solution-grid,
+      .testimonials-grid,
+      .use-cases-grid,
+      .old-new-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .problem,
+      .testimonials-section {
+        margin: 0;
+        border-radius: 0;
+        padding: 48px 24px;
+      }
+
+      .demo-section {
+        padding: 20px 0 60px;
+      }
+
+      .hero-social-proof {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .comparison-wrapper {
+        font-size: 0.875rem;
+      }
+
+      .comparison-header > div,
+      .comparison-row > div {
+        padding: 12px 16px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .footer-top {
+        flex-direction: column;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        gap: 32px;
+      }
+
+      .stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .hero {
+        padding: 60px 0 40px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero-sub {
+        font-size: 1.0625rem;
+      }
+
+      .hero-input-wrapper {
+        max-width: 100%;
+      }
+
+      .hero-input {
+        padding: 16px;
+      }
+
+      .hero-input textarea {
+        font-size: 1rem;
+        min-height: 60px;
+      }
+
+      .hero-input-btn {
+        width: 44px;
+        height: 44px;
+      }
+
+      .section-header h2 {
+        font-size: 1.5rem;
+      }
+
+      section {
+        padding: 60px 0;
+      }
+
+      .file-tree {
+        padding: 24px;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .modal {
+        padding: 32px 24px;
+        border-radius: 20px;
+        margin: 10px;
+      }
+
+      .modal-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .modal-form {
+        gap: 16px;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        padding: 10px 14px;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+
+      .hero {
+        padding: 40px 0 32px;
+      }
+
+      .hero h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+      }
+
+      .hero h1 br {
+        display: none;
+      }
+
+      .hero-badge {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+      }
+
+      .hero-sub {
+        font-size: 1rem;
+        margin-bottom: 24px;
+      }
+
+      .hero-input {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .hero-input textarea {
+        min-height: 80px;
+        width: 100%;
+      }
+
+      .hero-input-btn {
+        width: 100%;
+        height: 48px;
+        border-radius: 12px;
+      }
+
+      .step,
+      .feature-card,
+      .use-case,
+      .pricing-card {
+        padding: 24px;
+      }
+
+      .comparison-header > div,
+      .comparison-row > div {
+        padding: 10px 8px;
+        font-size: 0.75rem;
+      }
+
+      .comparison-row > div:nth-child(2),
+      .comparison-row > div:nth-child(3) {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+      }
+
+      .cta {
+        padding: 60px 0;
+      }
+
+      .cta h2 {
+        font-size: 1.5rem;
+      }
+
+      .cta-details {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .cta-button {
+        padding: 16px 32px;
+        font-size: 1rem;
+      }
+
+      .btn-lg {
+        padding: 14px 24px;
+        font-size: 0.9375rem;
+      }
+
+      .old-way-card,
+      .new-way-card {
+        padding: 24px;
+      }
+
+      footer {
+        padding: 48px 0 24px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="gradient-bg"></div>
+  <div class="grid-bg"></div>
+  <div class="gradient-orb gradient-orb-1"></div>
+  <div class="gradient-orb gradient-orb-2"></div>
+  <div class="gradient-orb gradient-orb-3"></div>
+  <div class="glow-line glow-line-1"></div>
+  <div class="glow-line glow-line-2"></div>
+  <div class="glow-line glow-line-3"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- Beta Signup Modal -->
+  <div class="modal-overlay" id="betaModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="modal-header">
+        <h2>Become a beta user for free</h2>
+        <p>Get early access and build closely with the founder.</p>
+      </div>
+      <form class="modal-form" id="betaForm">
+        <div class="form-group">
+          <label for="userName">Name</label>
+          <input type="text" id="userName" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label for="userEmail">Email</label>
+          <input type="email" id="userEmail" name="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="userPhone">Phone number</label>
+          <input type="tel" id="userPhone" name="phone" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label for="userLocation">Where are you based?</label>
+          <input type="text" id="userLocation" name="location" placeholder="City, Country">
+        </div>
+        <div class="form-group">
+          <label for="userIdea">What do you want to build?</label>
+          <textarea id="userIdea" name="idea" placeholder="Describe your app idea..." rows="3" readonly></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg modal-submit">Join the beta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">S</div>
+        ShipRight
+      </a>
+      <nav>
+        <a href="#features">Benefits</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="header-cta">
+        <a href="#" class="btn btn-primary">Start Building</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Now in beta
+      </div>
+      <h1>The missing piece for<br><em>vibe coding</em></h1>
+      <p class="hero-sub">Go from app idea to <strong>GitHub repo</strong> in 10 minutes. No coding required.</p>
+
+      <div class="hero-input-wrapper">
+        <div class="hero-input">
+          <textarea placeholder="I want to build..."></textarea>
+          <button class="hero-input-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <p class="hero-note">Free during beta. No credit card required.</p>
+
+      <!-- Social proof -->
+      <div class="hero-social-proof">
+        <div class="hero-avatars">
+          <div class="hero-avatar">S</div>
+          <div class="hero-avatar">M</div>
+          <div class="hero-avatar">J</div>
+          <div class="hero-avatar">+</div>
+        </div>
+        <p>Join <strong>50+</strong> founders building with ShipRight</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Video Section -->
+  <section class="demo-section">
+    <div class="container">
+      <div class="demo-video-wrapper">
+        <div class="demo-video-placeholder">
+          <div class="demo-play-btn">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <p class="demo-label">See how it works in 2 minutes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What You Get -->
+  <section id="what-you-get">
+    <div class="container">
+      <div class="solution-grid">
+        <div>
+          <div class="section-header" style="text-align: left; margin-bottom: 32px;">
+            <h2>What you get in your repo</h2>
+            <p style="margin: 16px 0 0 0;">Everything AI needs to understand your project from day one.</p>
+          </div>
+          <div class="solution-features">
+            <div class="solution-feature">
+              <div class="solution-feature-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+              <div><strong>Understand how your app works</strong> <span>— explains like your 10 🐣 </span></div>
+            </div>
+            <div class="solution-feature">
+              <div class="solution-feature-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+              <div><strong>AI picks your template</strong> <span>— customized to your app</span></div>
+            </div>
+            <div class="solution-feature">
+              <div class="solution-feature-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+              <div><strong>GitHub repo you own</strong> <span>— you own your code</span></div>
+            </div>
+            <div class="solution-feature">
+              <div class="solution-feature-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+              <div><strong>Vibe code ready</strong> <span>— AI optimized scaffolding from top vibe coders</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="file-tree">
+          <div class="file-tree-header">Your Generated Repo</div>
+          <div class="file-tree-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+            </svg>
+            my-saas-app/
+          </div>
+          <div class="file-tree-indent">
+            <div class="file-tree-item highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              CLAUDE.md
+              <span class="tag">AI context</span>
+            </div>
+            <div class="file-tree-item highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              TASKS.md
+              <span class="tag">Backlog</span>
+            </div>
+            <div class="file-tree-item highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              PRD.md
+              <span class="tag">Requirements</span>
+            </div>
+            <div class="file-tree-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+              </svg>
+              skills/
+            </div>
+            <div class="file-tree-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+              </svg>
+              src/
+            </div>
+            <div class="file-tree-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>
+              </svg>
+              package.json
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section (reframed from features) -->
+  <section id="features" class="benefits-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Ship faster. Build with confidence.</h2>
+        <p>Stop wasting time on setup. Start building features that matter.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3>Save days of setup time</h3>
+          <p>Go from app idea to working codebase in 10 minutes, not days. AI picks the perfect template for you.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Eliminate endless error loops</h3>
+          <p>CLAUDE.md gives AI agents the context they need. No more fixing mistakes AI made because it didn't understand your project.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>
+            </svg>
+          </div>
+          <h3>Always know what to build next</h3>
+          <p>TASKS.md gives you a clear roadmap. No more staring at a blank screen wondering where to start.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <h3>Keep your project organized</h3>
+          <p>PRD.md documents the "why" behind features. You and AI stay aligned as your project grows.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <h3>Own your code forever</h3>
+          <p>It's a GitHub repo in your account. No platform lock-in. Take it anywhere, anytime.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3>Build like an expert</h3>
+          <p>Skills directory gives AI domain knowledge from experienced developers. Build like you've done this before.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>From idea to codebase in 3 steps</h2>
+        <p>No guessing. No decision paralysis. Just clarity and code.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Describe</h3>
+          <p>Tell us what you want to build in plain English. AI guides you through what's possible, helping you nail down features and requirements.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Match</h3>
+          <p>We analyze your needs and match you to the perfect template. Production-ready code, optimized for vibe coding from day one.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Build</h3>
+          <p>Get a GitHub repo with all the scaffolding AI needs to understand your project. Start vibe coding immediately.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <h2>Unlike other AI builders, you own the code</h2>
+        <p>No walled gardens. No lock-in. Just your code in your repo.</p>
+      </div>
+      <div class="comparison-wrapper">
+        <div class="comparison-header">
+          <div></div>
+          <div>
+            <div class="logo-icon" style="width: 24px; height: 24px; font-size: 0.7rem;">S</div>
+            ShipRight
+          </div>
+          <div>Lovable / Bolt / Base44</div>
+        </div>
+        <div class="comparison-row">
+          <div>Output</div>
+          <div>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            GitHub repo you own
+          </div>
+          <div>
+            <svg class="x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Hosted on their platform
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div>Lock-in</div>
+          <div>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            None — take it anywhere
+          </div>
+          <div>
+            <svg class="x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Stuck when you outgrow
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div>AI optimization</div>
+          <div>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Vibe code ready
+          </div>
+          <div>
+            <svg class="x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Generic code
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div>Templates</div>
+          <div>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            Curated, best-in-class
+          </div>
+          <div>
+            <svg class="x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            One-size-fits-all
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div>Pricing</div>
+          <div>
+            <svg class="check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            $15-30/mo
+          </div>
+          <div>
+            <svg class="x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            $50-200/mo
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Join founders building with ShipRight</h2>
+      </div>
+      <div class="testimonials-grid" style="grid-template-columns: 1fr; max-width: 500px;">
+        <div class="testimonial" style="text-align: center;">
+          <p class="testimonial-quote">"We're still in beta, so no testimonials yet. But my mom says it's really cool."</p>
+          <p class="testimonial-author">— The Founder</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">1+</div>
+          <div class="stat-label">Repos generated</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">1+</div>
+          <div class="stat-label">Founders building</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">5 min</div>
+          <div class="stat-label">Setup time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2>Simple pricing. No surprises.</h2>
+        <p>Free during beta. Affordable plans when we launch.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card featured">
+          <div class="pricing-badge">Current</div>
+          <div class="pricing-name">Beta</div>
+          <div class="pricing-desc">During beta</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">Free</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Unlimited projects
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Full template library
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              All scaffolding features
+            </li>
+          </ul>
+          <a href="#" class="btn btn-primary">Start building</a>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-desc">Coming soon</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">$15</span>
+            <span class="pricing-period">/month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Template matching
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              GitHub repo generation
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              AI scaffolding files
+            </li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Join waitlist</a>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-desc">Coming soon</div>
+          <div class="pricing-price">
+            <span class="pricing-amount">$30</span>
+            <span class="pricing-period">/month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Everything in Starter
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Custom template requests
+            </li>
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+              Priority support
+            </li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Join waitlist</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently asked questions</h2>
+        <p>Everything you need to know about ShipRight.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button class="faq-question">
+            What exactly do I get?
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            A GitHub repository with a production-ready template matched to your requirements, plus AI-optimized scaffolding files (CLAUDE.md, TASKS.md, PRD.md) that help Claude Code understand your project.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do I need to know how to code?
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            No. You describe your app in plain English. After you get your repo, you can use Claude Code or Cursor to build features by describing what you want.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I use this with Cursor / Claude Code / Windsurf?
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            Yes. The repo works with any AI coding tool. The scaffolding is optimized for Claude Code but helps any AI agent.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What happens to my code?
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            It's yours. The repo is created in your GitHub account. We don't host it, we don't have access after creation. Take it anywhere.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What's the catch?
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            No catch. Free during beta, then $15-30/month. No lock-in, no hidden fees.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta final-cta">
+    <div class="container">
+      <h2>Stop researching. Start building.</h2>
+      <p>Your app idea + 10 minutes = a GitHub repo ready for vibe coding.</p>
+      <a href="#" class="btn btn-primary btn-lg cta-button">Start building free</a>
+      <div class="cta-details">
+        <span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Free during beta
+        </span>
+        <span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          No credit card
+        </span>
+        <span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          10 minutes to repo
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <div class="logo-icon">S</div>
+            ShipRight
+          </a>
+          <p>The on-ramp to vibe coding</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Templates</a>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <a href="#">Blog</a>
+            <a href="#">Documentation</a>
+            <a href="#">Compare</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ShipRight. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+
+        // Open clicked if it wasn't open
+        if (!isOpen) {
+          item.classList.add('open');
+        }
+      });
+    });
+
+    // Particle animation
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.3,
+        speedY: (Math.random() - 0.5) * 0.3,
+        opacity: Math.random() * 0.3 + 0.1,
+        hue: Math.random() * 40 + 210 // Blue range
+      };
+    }
+
+    function initParticles() {
+      particles = [];
+      const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(createParticle());
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        // Wrap around edges
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 70%, 60%, ${p.opacity})`;
+        ctx.fill();
+
+        // Draw connections
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `hsla(220, 70%, 50%, ${0.08 * (1 - dist / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        });
+      });
+
+      animationId = requestAnimationFrame(drawParticles);
+    }
+
+    // Initialize particles
+    resizeCanvas();
+    initParticles();
+    drawParticles();
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initParticles();
+    });
+
+    // Scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Add animation classes to elements
+    document.querySelectorAll('.section-header, .step, .feature-card, .benefit-card, .use-case, .testimonial, .pricing-card, .faq-item, .old-way-card, .new-way-card, .demo-video-placeholder').forEach(el => {
+      el.classList.add('animate-on-scroll');
+      observer.observe(el);
+    });
+
+    document.querySelectorAll('.steps, .features-grid, .benefits-grid, .use-cases-grid, .testimonials-grid, .pricing-grid, .old-new-grid').forEach(el => {
+      el.classList.add('stagger-children');
+      observer.observe(el);
+    });
+
+    // Typing effect for hero input placeholder
+    const textarea = document.querySelector('.hero-input textarea');
+    const placeholders = [
+      'Vertical AI B2B SaaS for enterprise workflows',
+      'Uber for laundry but make it agentic',
+      'Disrupting the $4.2T spreadsheet industry',
+      'AI-powered AI for your AI',
+      'WeWork meets Theranos meets integrity',
+      'LinkedIn but people are honest',
+      'Airbnb for your garage (seriously)',
+      'A pivot-ready MVP with synergy'
+    ];
+    let placeholderIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 100;
+
+    function typeEffect() {
+      const currentPlaceholder = placeholders[placeholderIndex];
+
+      if (isDeleting) {
+        textarea.placeholder = currentPlaceholder.substring(0, charIndex - 1);
+        charIndex--;
+        typeSpeed = 50;
+      } else {
+        textarea.placeholder = currentPlaceholder.substring(0, charIndex + 1);
+        charIndex++;
+        typeSpeed = 100;
+      }
+
+      if (!isDeleting && charIndex === currentPlaceholder.length) {
+        typeSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+        typeSpeed = 500;
+      }
+
+      setTimeout(typeEffect, typeSpeed);
+    }
+
+    typeEffect();
+
+    // Mouse glow effect on hero section
+    const hero = document.querySelector('.hero');
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      hero.style.setProperty('--mouse-x', `${x}px`);
+      hero.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    // Beta modal
+    const modal = document.getElementById('betaModal');
+    const modalClose = document.getElementById('modalClose');
+    const heroInputBtn = document.querySelector('.hero-input-btn');
+    const heroTextarea = document.querySelector('.hero-input textarea');
+    const userIdeaField = document.getElementById('userIdea');
+    const betaForm = document.getElementById('betaForm');
+
+    function openModal() {
+      const idea = heroTextarea.value.trim();
+      if (idea) {
+        userIdeaField.value = idea;
+      }
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    heroInputBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+
+    modalClose.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+
+    betaForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(betaForm);
+      const data = Object.fromEntries(formData);
+      console.log('Beta signup:', data);
+
+      // Show success state
+      betaForm.innerHTML = `
+        <div style="text-align: center; padding: 20px 0;">
+          <div style="width: 64px; height: 64px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 8px;">You're on the list!</h3>
+          <p style="color: var(--text-muted);">We'll be in touch soon to get you started.</p>
+        </div>
+      `;
+
+      setTimeout(closeModal, 3000);
+    });
+
+    // Error mock interaction
+    const errorMock = document.querySelector('.error-mock');
+    const errorMockBtns = document.querySelectorAll('.error-mock-btn');
+    const errorIcon = document.querySelector('.error-mock-title svg');
+
+    errorMockBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        errorMock.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+        errorMock.style.opacity = '0';
+        errorMock.style.transform = 'translateY(10px)';
+
+        setTimeout(() => {
+          errorMock.style.opacity = '1';
+          errorMock.style.transform = 'translateY(0)';
+          errorIcon.classList.add('flash');
+
+          setTimeout(() => {
+            errorIcon.classList.remove('flash');
+          }, 1000);
+        }, 400);
+      });
+    });
+  </script>
+</body>
+</html>
