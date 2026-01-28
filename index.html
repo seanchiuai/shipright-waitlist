@@ -7,6 +7,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script type="module">
+    import { ConvexHttpClient } from "https://esm.sh/convex/browser";
+
+    // Replace with your Convex deployment URL after running: npx convex dev
+    const CONVEX_URL = "YOUR_CONVEX_URL";
+
+    window.convexClient = new ConvexHttpClient(CONVEX_URL);
+  </script>
   <style>
     * {
       margin: 0;
@@ -223,10 +231,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 1.25rem;
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-weight: 400;
+      font-size: 1.375rem;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: -0.01em;
     }
 
     .logo-icon {
@@ -2075,6 +2085,96 @@
         gap: 16px;
         text-align: center;
       }
+
+      .follow-card {
+        padding: 32px 24px !important;
+        margin: 0 8px;
+      }
+
+      .follow-card h3 {
+        font-size: 1.25rem !important;
+      }
+
+      .social-icons {
+        gap: 12px !important;
+      }
+
+      .social-icons a {
+        width: 46px !important;
+        height: 46px !important;
+      }
+
+      .follow-section h2 {
+        font-size: 1.5rem !important;
+      }
+    }
+
+    /* Follow the journey - reusable classes */
+    .follow-card {
+      max-width: 400px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    }
+
+    .follow-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .follow-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-icons a {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .social-icons a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .follow-handle {
+      margin-top: 16px;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+
+    .follow-section {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .follow-section h2 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 2rem;
+      margin-bottom: 24px;
     }
   </style>
 </head>
@@ -2135,7 +2235,6 @@
         ShipRight
       </a>
       <nav>
-        <a href="#features">Benefits</a>
         <a href="#how-it-works">How it works</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
@@ -2149,12 +2248,8 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        Now in beta
-      </div>
       <h1>The missing piece for<br><em>vibe coding</em></h1>
-      <p class="hero-sub">Go from app idea to <strong>GitHub repo</strong> in 10 minutes. No coding required.</p>
+      <p class="hero-sub">Turn ideas into <strong>solid plans and architecture</strong> ready to vibe code.</p>
 
       <div class="hero-input-wrapper">
         <div class="hero-input">
@@ -2167,7 +2262,7 @@
         </div>
       </div>
 
-      <p class="hero-note">Free during beta. No credit card required.</p>
+      <p class="hero-note">No credit card required.</p>
 
       <!-- Social proof -->
       <div class="hero-social-proof">
@@ -2177,23 +2272,29 @@
           <div class="hero-avatar">J</div>
           <div class="hero-avatar">+</div>
         </div>
-        <p>Join <strong>50+</strong> founders building with ShipRight</p>
+        <p>Join <strong>1+</strong> founder building with ShipRight</p>
       </div>
     </div>
   </section>
 
-  <!-- Demo Video Section -->
-  <section class="demo-section">
+  <!-- Follow the Journey -->
+  <section style="padding: 60px 0 80px;">
     <div class="container">
-      <div class="demo-video-wrapper">
-        <div class="demo-video-placeholder">
-          <div class="demo-play-btn">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-          </div>
-          <p class="demo-label">See how it works in 2 minutes</p>
+      <div class="follow-card">
+        <p class="follow-label">Building in public</p>
+        <h3>Follow the journey</h3>
+        <div class="social-icons">
+          <a href="https://x.com/seanchiuai" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/seanchiuai" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/seanchiuai/" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
         </div>
+        <p class="follow-handle">@seanchiuai</p>
       </div>
     </div>
   </section>
@@ -2291,72 +2392,6 @@
               package.json
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Benefits Section (reframed from features) -->
-  <section id="features" class="benefits-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Ship faster. Build with confidence.</h2>
-        <p>Stop wasting time on setup. Start building features that matter.</p>
-      </div>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-          <h3>Save days of setup time</h3>
-          <p>Go from app idea to working codebase in 10 minutes, not days. AI picks the perfect template for you.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <h3>Eliminate endless error loops</h3>
-          <p>CLAUDE.md gives AI agents the context they need. No more fixing mistakes AI made because it didn't understand your project.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>
-            </svg>
-          </div>
-          <h3>Always know what to build next</h3>
-          <p>TASKS.md gives you a clear roadmap. No more staring at a blank screen wondering where to start.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
-            </svg>
-          </div>
-          <h3>Keep your project organized</h3>
-          <p>PRD.md documents the "why" behind features. You and AI stay aligned as your project grows.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-          </div>
-          <h3>Own your code forever</h3>
-          <p>It's a GitHub repo in your account. No platform lock-in. Take it anywhere, anytime.</p>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-          </div>
-          <h3>Build like an expert</h3>
-          <p>Skills directory gives AI domain knowledge from experienced developers. Build like you've done this before.</p>
         </div>
       </div>
     </div>
@@ -2498,7 +2533,7 @@
     <div class="container">
       <div class="section-header">
         <h2>Simple pricing. No surprises.</h2>
-        <p>Free during beta. Affordable plans when we launch.</p>
+        <p>Affordable plans coming soon.</p>
       </div>
       <div class="pricing-grid">
         <div class="pricing-card featured">
@@ -2624,33 +2659,30 @@
             <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </button>
           <div class="faq-answer">
-            No catch. Free during beta, then $15-30/month. No lock-in, no hidden fees.
+            No catch. $15-30/month when we launch. No lock-in, no hidden fees.
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta final-cta">
+  <!-- Follow the Journey (Footer CTA) -->
+  <section class="follow-section">
     <div class="container">
-      <h2>Stop researching. Start building.</h2>
-      <p>Your app idea + 10 minutes = a GitHub repo ready for vibe coding.</p>
-      <a href="#" class="btn btn-primary btn-lg cta-button">Start building free</a>
-      <div class="cta-details">
-        <span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Free during beta
-        </span>
-        <span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          No credit card
-        </span>
-        <span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          10 minutes to repo
-        </span>
+      <p class="follow-label">Building in public</p>
+      <h2>Follow the journey</h2>
+      <div class="social-icons">
+        <a href="https://x.com/seanchiuai" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/seanchiuai" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/seanchiuai/" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
       </div>
+      <p class="follow-handle">@seanchiuai</p>
     </div>
   </section>
 
@@ -2920,26 +2952,115 @@
       }
     });
 
-    betaForm.addEventListener('submit', (e) => {
+    betaForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(betaForm);
       const data = Object.fromEntries(formData);
       console.log('Beta signup:', data);
 
-      // Show success state
+      // Submit to Convex
+      try {
+        const submitBtn = betaForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+
+        const result = await window.convexClient.mutation(
+          "waitlist:add",
+          {
+            name: data.name || '',
+            email: data.email || '',
+            phone: data.phone || '',
+            location: data.location || '',
+            idea: data.idea || '',
+          }
+        );
+
+        if (!result.success) {
+          alert(result.message || 'Something went wrong');
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+          return;
+        }
+
+        console.log('Saved to Convex:', result);
+      } catch (error) {
+        console.error('Failed to save to Convex:', error);
+        // Continue to show success anyway for now (optional)
+      }
+
+      // Create confetti
+      function createConfetti() {
+        const colors = ['#0066ff', '#22c55e', '#8b5cf6', '#06b6d4', '#f59e0b', '#ef4444'];
+        const confettiCount = 150;
+        const modal = document.querySelector('.modal');
+
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement('div');
+          confetti.style.cssText = `
+            position: absolute;
+            width: ${Math.random() * 10 + 5}px;
+            height: ${Math.random() * 10 + 5}px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            left: ${Math.random() * 100}%;
+            top: -20px;
+            border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+            pointer-events: none;
+            animation: confettiFall ${Math.random() * 2 + 2}s ease-out forwards;
+            animation-delay: ${Math.random() * 0.5}s;
+            transform: rotate(${Math.random() * 360}deg);
+          `;
+          modal.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 4000);
+        }
+      }
+
+      // Add confetti animation styles
+      if (!document.getElementById('confetti-styles')) {
+        const style = document.createElement('style');
+        style.id = 'confetti-styles';
+        style.textContent = `
+          @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(400px) rotate(720deg) scale(0); opacity: 0; }
+          }
+          @keyframes successPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          @keyframes checkDraw {
+            0% { stroke-dashoffset: 24; }
+            100% { stroke-dashoffset: 0; }
+          }
+          @keyframes ringPulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      createConfetti();
+
+      // Show success state with animation
       betaForm.innerHTML = `
-        <div style="text-align: center; padding: 20px 0;">
-          <div style="width: 64px; height: 64px; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5">
-              <path d="M20 6L9 17l-5-5"/>
-            </svg>
+        <div style="text-align: center; padding: 20px 0; position: relative;">
+          <div style="position: relative; width: 80px; height: 80px; margin: 0 auto 24px;">
+            <div style="position: absolute; inset: 0; background: var(--accent); border-radius: 50%; animation: ringPulse 1s ease-out;"></div>
+            <div style="position: absolute; inset: 0; background: var(--accent); border-radius: 50%; animation: ringPulse 1s ease-out 0.2s;"></div>
+            <div style="position: absolute; inset: 0; background: var(--accent-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: successPop 0.5s ease-out forwards;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6L9 17l-5-5" style="stroke-dasharray: 24; animation: checkDraw 0.5s ease-out 0.3s forwards; stroke-dashoffset: 24;"/>
+              </svg>
+            </div>
           </div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 8px;">You're on the list!</h3>
-          <p style="color: var(--text-muted);">We'll be in touch soon to get you started.</p>
+          <h3 style="font-size: 1.5rem; margin-bottom: 8px; animation: successPop 0.5s ease-out 0.2s both;">You're in!</h3>
+          <p style="color: var(--text-muted); font-size: 1.0625rem; animation: successPop 0.5s ease-out 0.3s both;">We'll be in touch soon to get you started.</p>
         </div>
       `;
 
-      setTimeout(closeModal, 3000);
+      setTimeout(closeModal, 4000);
     });
 
     // Error mock interaction
