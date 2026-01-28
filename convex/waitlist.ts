@@ -32,13 +32,6 @@ export const add = mutation({
   },
 });
 
-export const getAll = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("waitlist").collect();
-  },
-});
-
 export const getCount = query({
   args: {},
   handler: async (ctx) => {
